@@ -1,0 +1,14 @@
+/var/log/myservice/*.log {
+    daily
+    size 2G
+    rotate 7
+    compress
+    delaycompress
+    compresscmd /bin/tar
+    compressext .tar.gz
+    missingok
+    copytruncate
+    create 0640 root root
+    su root root
+    notifempty
+}
