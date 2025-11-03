@@ -20,10 +20,13 @@ myservice/
     └── /etc/logrotate.d/myservice
 
 
-İlk olaraq Ubuntu Server 24.04 quraşdırılır.
-Sistem yenilənir və docker ilə docker-compose paketləri quraşdırılır:
-Bu mərhələdə docker --version və docker compose version komandaları ilə quraşdırmanın uğurlu olub-olmadığı yoxlanılır.
+İlk olaraq Ubuntu Server 24.04 quraşdırdım.
+Sistemdə var olan updateləri verdim və docker ilə docker-compose paketləri quraşdırdım:
+sudo apt update && sudo apt upgrade -y
+sudo apt install docker.io docker-compose-plugin -y
 
+Bu mərhələdə docker --version və docker compose version komandaları ilə quraşdırmanın uğurlu olub-olmadığı yoxlanılır.
+Qeyd: Bütün konfiqurasiya faylları layihənin GitHub repozitoriyasında yerləşir.
 
 Servis fayllarını ayrıca saxlamaq üçün myservice adlı qovluq yaradılır:
 myservice/
@@ -32,15 +35,15 @@ myservice/
 ├── Dockerfile
 └── docker-compose.yml
 
-Nginx konfiqurasiyasının hazırlanır(config faylı gitlab linkinde movcuddur)
+Nginx konfiqurasiyasının hazırlanır(config faylı github linkinde movcuddur)
 
 Dockerfile hazırlanması
-Nginx imicindən istifadə olunaraq konteyner konfiqurasiyası yaradılır(Dockerfile gitlab linkinde movcuddur)
+Nginx imagesindən istifadə olunaraq konteyner konfiqurasiyası yaratdım(Dockerfile github linkinde movcuddur)
 
-docker-compose.yml faylı hazırlanır
-Konteynerin idarə olunması üçün docker-compose konfiqurasiyası yazılır(docker-compose.yml gitlab linkinde movcuddur)
+docker-compose.yml faylı hazırladım
+Konteynerin idarə olunması üçün docker-compose konfiqurasiyası yazdım(docker-compose.yml github linkinde movcuddur)
 
-Servisin yığılması və işə salınması
+Servisi build etdim və işə saldım:
 docker compose build --no-cache
 docker compose up -d
 
@@ -48,15 +51,18 @@ Test mərhələsi
 curl http://localhost:5000
 
 
-Servisi systemd üzərindən idarə etmək
-Bunun üçün ilk növbede /etc/systemd/system/myservice.service faylını yaradırıq(Fayl linkde mövcüddur)
-
+Servisi systemd üzərindən idarə etmək:
+Bunun üçün ilk növbede /etc/systemd/system/myservice.service faylını yaratdım(Fayl linkde mövcüddur)
+sudo systemctl daemon-reload
+sudo systemctl enable --now myservice
+sudo systemctl status myservice
+Servis active (running) vəziyyətdə qalır və sistem açıldıqda avtomatik işə düşür.
 
 Log rotasiyası (logrotate)
 
-/etc/logrotate.d/myservice faylı yaradılır(linkde mövcuddur)
+/etc/logrotate.d/myservice faylı yaratdım(linkde mövcuddur)
 
-Daha sonra test edirik
+Daha sonra test etdim
 sudo logrotate -v -f /etc/logrotate.d/myservice
 
 
